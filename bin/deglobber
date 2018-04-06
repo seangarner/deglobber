@@ -1,0 +1,63 @@
+#!/usr/bin/env node
+'use strict';
+
+const meow = require('meow');
+const deglob = require('deglob');
+
+const {input: globs, flags: {ignoreFile, ignore}, showHelp} = meow(`
+	USEAGE
+	  $ deglobber [GLOB]
+
+  List files matching globs respecting ignore syntax from .gitignore
+
+	OPTIONS
+	  -i, --ignore-file=FILE  Load .gitignore syntax patterns from file (DEFAULT: .gitignore)
+        --no-ignore-file    Don't read patterns from file (requires --ignore)
+        --ignore=RULE       Additional ignore pattern
+
+	EXAMPLES
+	  $ deglobber '**.js'
+
+    Find all javascript files excluding those matched by .gitignore
+
+    $ deglobber --ignore-file .npmignore
+
+    Find all files not excluded by .npmignore
+`, {
+	flags: {
+		'ignore-file': {
+			alias: 'i',
+      default: '.gitignore'
+		},
+    ignore: {
+      default: []
+    }
+	}
+});
+
+
+
+if (ignoreFile === false && !ignore) {
+  console.error('ERROR: cannot --no-ignore-file without --ignore');
+  showHelp();
+}
+
+if (globs.length === 0) {
+  globs.push('**');
+}
+
+const opts = {
+  usePackageJson: false,
+  useGitIgnore: !!ignoreFile,
+  gitIgnoreFile: ignoreFile,
+  ignore
+};
+
+deglob(globs, opts, (err, files) => {
+  if (err) {
+    console.error(err.message);
+    process.exit(1);
+  }
+
+  files.forEach((file) => console.log(file));
+});

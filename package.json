@@ -1,0 +1,26 @@
+{
+  "name": "deglobber",
+  "version": "1.0.0",
+  "description": "list files using globs respecting excludes from .gitignore",
+  "main": "bin/deglobber",
+  "bin": {
+    "deglobber": "./bin/deglobber"
+  },
+  "keywords": [
+    "glob",
+    "find",
+    "deglobber",
+    "gitignore",
+    "npmignore",
+    ".gitignore",
+    ".npmignore",
+    "ignore",
+    "filter"
+  ],
+  "author": "Sean Garner",
+  "license": "MIT",
+  "dependencies": {
+    "deglob": "^2.1.0",
+    "meow": "^4.0.0"
+  }
+}
