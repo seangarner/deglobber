@@ -3,8 +3,9 @@
 
 const meow = require('meow');
 const deglob = require('deglob');
+const path = require('path');
 
-const {input: globs, flags: {ignoreFile, ignore}, showHelp} = meow(`
+const {input: globs, flags: {ignoreFile, ignore, relative}, showHelp} = meow(`
 	USEAGE
 	  $ deglobber [GLOB]
 
@@ -14,6 +15,7 @@ const {input: globs, flags: {ignoreFile, ignore}, showHelp} = meow(`
 	  -i, --ignore-file=FILE  Load .gitignore syntax patterns from file (DEFAULT: .gitignore)
         --no-ignore-file    Don't read patterns from file (requires --ignore)
         --ignore=RULE       Additional ignore pattern
+	  -r  --relative          Print paths relative to $(pwd)
 
 	EXAMPLES
 	  $ deglobber '**.js'
@@ -31,7 +33,12 @@ const {input: globs, flags: {ignoreFile, ignore}, showHelp} = meow(`
 		},
     ignore: {
       default: []
-    }
+    },
+		relative: {
+			alias: 'r',
+			type: 'boolean',
+			default: false
+		}
 	}
 });
 
@@ -59,5 +66,10 @@ deglob(globs, opts, (err, files) => {
     process.exit(1);
   }
 
-  files.forEach((file) => console.log(file));
+	if (relative) {
+		const cwd = process.cwd();
+		files.forEach((file) => console.log(path.relative(cwd, file)));
+	} else {
+		files.forEach((file) => console.log(file));
+	}
 });
