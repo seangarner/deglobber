@@ -1,6 +1,6 @@
 {
   "name": "deglobber",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "list files using globs respecting excludes from .gitignore",
   "main": "bin/deglobber",
   "bin": {
