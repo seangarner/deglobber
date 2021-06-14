@@ -32,7 +32,8 @@ const {input: globs, flags: {ignoreFile, ignore, relative}, showHelp} = meow(`
       default: '.gitignore'
 		},
     ignore: {
-      default: []
+      default: [],
+			isMultiple: true
     },
 		relative: {
 			alias: 'r',
